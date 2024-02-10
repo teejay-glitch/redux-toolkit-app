@@ -5,8 +5,8 @@ import {
   decrement,
   reset,
   incrementByAmount,
-} from "../app/features/counter/counterSlice";
-import { RootState } from "../app/store/store";
+} from "../../app/features/counter/counterSlice";
+import { RootState } from "../../app/store/store";
 
 const Counter: React.FC = () => {
   const count = useSelector((state: RootState) => state.counter.count);

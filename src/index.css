@@ -1,4 +1,4 @@
-/*LESSON 02*/
+/*LESSON 03*/
 * {
   margin: 0;
   padding: 0;
@@ -67,5 +67,4 @@ form {
   border: none;
   color: whitesmoke;
   font-size: 1rem;
-  cursor: pointer;
 }

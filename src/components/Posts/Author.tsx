@@ -2,13 +2,15 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { selectAllUsers } from "../../app/features/posts/userSlice";
 import { User } from "../../models/User";
+import { selectAllAsyncUsers } from "../../app/features/usersAsync/userAsyncSlice";
 
 interface AuthorProps {
   authorId: string;
 }
 
 const Author: React.FC<AuthorProps> = ({ authorId }: AuthorProps) => {
-  const authors = useSelector(selectAllUsers);
+  // const authors = useSelector(selectAllUsers);
+  const authors = useSelector(selectAllAsyncUsers); // getting users from API
 
   const author = authors.find((author: User) => author.id === authorId);
 

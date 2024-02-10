@@ -5,6 +5,7 @@ export interface Post {
   userId: string;
   date: string;
   reactions: Reaction;
+  body?: string;
 }
 
 export interface Reaction {
@@ -13,4 +14,16 @@ export interface Reaction {
   heart: number;
   rocket: number;
   coffee: number;
+}
+
+export interface PostsResponse {
+  posts: Post[];
+  status: "idle" | "loading" | "suceeded" | "failed";
+  error: any;
+}
+
+export interface PostRequest {
+  title: string;
+  body: string;
+  userId: string;
 }

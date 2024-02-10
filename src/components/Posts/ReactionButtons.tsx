@@ -1,7 +1,7 @@
 import React from "react";
 import { Post, Reaction } from "../../models/Post";
 import { useDispatch } from "react-redux";
-import { reactionAdded } from "../../app/features/posts/postSlice";
+import { reactionAddedAsync } from "../../app/features/postsAsync/postAsyncSlice";
 
 const ReactionEmoji = {
   thumbsUp: "👍",
@@ -27,7 +27,7 @@ const ReactionButtons: React.FC<ReactionButtonsProps> = ({
         type="button"
         className="reactionButton"
         onClick={() =>
-          dispatch(reactionAdded({ postId: post.id, reaction: name }))
+          dispatch(reactionAddedAsync({ postId: post.id, reaction: name }))
         }
       >
         {emoji} {post.reactions[name as keyof Reaction]}
