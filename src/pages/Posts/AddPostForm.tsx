@@ -7,6 +7,7 @@ import { selectAllAsyncUsers } from "../../app/features/usersAsync/userAsyncSlic
 import { addNewPost } from "../../app/features/postsAsync/postAsyncSlice";
 import { PostRequest } from "../../models/Post";
 import { AppDispatch } from "../../app/store/store";
+import { useNavigate } from "react-router-dom";
 
 const AddPostForm: React.FC = () => {
   const [title, seTtitle] = useState<string>("");
@@ -16,6 +17,7 @@ const AddPostForm: React.FC = () => {
   // const users = useSelector(selectAllUsers);
   const users = useSelector(selectAllAsyncUsers); // getting users from API
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     seTtitle(e.target.value);
@@ -29,8 +31,7 @@ const AddPostForm: React.FC = () => {
     setUserId(e.currentTarget.value);
   };
 
-  const canSave =
-    [title, content, userId].every(Boolean) && addRequestStatus === "idle";
+  const canSave = [title, content, userId].every(Boolean) && addRequestStatus === "idle";
 
   const onSavePostClicked = () => {
     // if (title && content) {
@@ -56,6 +57,7 @@ const AddPostForm: React.FC = () => {
         seTtitle("");
         setContent("");
         setUserId("");
+        navigate("/");
       } catch (error) {
         console.error("Failed to save the post ", error);
       } finally {
@@ -79,24 +81,13 @@ const AddPostForm: React.FC = () => {
       <h2>Add a New Post</h2>
       <form>
         <label htmlFor="postTitle">Post Title:</label>
-        <input
-          type="text"
-          id="postTitle"
-          name="postTitle"
-          value={title}
-          onChange={(e) => onTitleChange(e)}
-        />
+        <input type="text" id="postTitle" name="postTitle" value={title} onChange={(e) => onTitleChange(e)} />
         <label htmlFor="postAuthor">Author:</label>
         <select id="postAuthor" onChange={(e) => onAuthorChange(e)}>
           {userOptions()}
         </select>
         <label htmlFor="postContent">Content:</label>
-        <textarea
-          id="postContent"
-          name="postContent"
-          value={content}
-          onChange={(e) => onContentChange(e)}
-        />
+        <textarea id="postContent" name="postContent" value={content} onChange={(e) => onContentChange(e)} />
         <button type="button" onClick={onSavePostClicked} disabled={!canSave}>
           Save Post
         </button>

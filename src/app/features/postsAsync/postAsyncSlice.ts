@@ -1,16 +1,5 @@
-import {
-  PayloadAction,
-  createSlice,
-  nanoid,
-  createAsyncThunk,
-  isAction,
-} from "@reduxjs/toolkit";
-import {
-  Post,
-  PostRequest,
-  PostsResponse,
-  Reaction,
-} from "../../../models/Post";
+import { PayloadAction, createSlice, nanoid, createAsyncThunk } from "@reduxjs/toolkit";
+import { Post, PostRequest, PostsResponse, Reaction } from "../../../models/Post";
 import { RootState } from "../../store/store";
 import axios from "axios";
 import { sub } from "date-fns";
@@ -41,17 +30,36 @@ export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
   }
 });
 
-export const addNewPost = createAsyncThunk(
-  "posts/addNewPost",
-  async (initialPost: PostRequest) => {
-    try {
-      const response = await axios.post(POSTS_URL, initialPost);
-      return response.data;
-    } catch (error: any) {
-      return error?.message;
-    }
+export const addNewPost = createAsyncThunk("posts/addNewPost", async (initialPost: PostRequest) => {
+  try {
+    const response = await axios.post(POSTS_URL, initialPost);
+    return response.data;
+  } catch (error: any) {
+    return error?.message;
   }
-);
+});
+
+export const updatePost = createAsyncThunk("posts/updatePost", async (initialPost: PostRequest) => {
+  const { id } = initialPost;
+  try {
+    const response = await axios.put(`${POSTS_URL}/${id}`, initialPost);
+    return response.data;
+  } catch (error: any) {
+    // return error?.message;
+    return initialPost; // only for testing redux
+  }
+});
+
+export const deletePost = createAsyncThunk("posts/deletePost", async (initialPost: PostRequest) => {
+  const { id } = initialPost;
+  try {
+    const response = await axios.delete(`${POSTS_URL}/${id}`);
+    if (response?.status === 200) return initialPost;
+    return `${response?.status} : ${response.statusText}`;
+  } catch (error: any) {
+    return error.message;
+  }
+});
 
 const postAsyncSlice = createSlice({
   name: "postsAsync",
@@ -83,9 +91,6 @@ const postAsyncSlice = createSlice({
     },
     reactionAddedAsync(state, action: PayloadAction<ReactionAction>) {
       const { postId, reaction } = action.payload;
-      console.log("postID : ", postId);
-      console.log("reaction ", reaction);
-
       const post = state.posts.find((p: Post) => p.id === postId);
 
       if (post) {
@@ -137,9 +142,30 @@ const postAsyncSlice = createSlice({
           coffee: 0,
         };
 
-        console.log(action.payload);
-
         state.posts.push(action.payload);
+      })
+      .addCase(updatePost.fulfilled, (state, action) => {
+        if (!action.payload?.id) {
+          console.log("Update could not complete");
+          console.log(action.payload);
+          return;
+        }
+
+        const { id } = action.payload;
+        action.payload.date = new Date().toISOString();
+        const posts = state.posts.filter((post) => post.id !== id);
+        state.posts = [...posts, action.payload];
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        if (!action.payload?.id) {
+          console.log("Delete could not complete");
+          console.log(action.payload);
+          return;
+        }
+
+        const { id } = action.payload;
+        const posts = state.posts.filter((post) => post.id !== id);
+        state.posts = posts;
       });
   },
 });
@@ -147,6 +173,10 @@ const postAsyncSlice = createSlice({
 export const selectAllAsyncPosts = (state: RootState) => state.postsAsync.posts;
 export const getPostsStatus = (state: RootState) => state.postsAsync.status;
 export const getPostsError = (state: RootState) => state.postsAsync.error;
+
+export const selectPostById = (state: RootState, postId: string | undefined) => {
+  return state.postsAsync.posts.find((post: Post) => post.id.toString() === postId);
+};
 
 export const { postAddedAsync, reactionAddedAsync } = postAsyncSlice.actions;
 

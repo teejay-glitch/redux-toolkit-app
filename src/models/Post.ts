@@ -23,7 +23,9 @@ export interface PostsResponse {
 }
 
 export interface PostRequest {
+  id?: string;
   title: string;
   body: string;
   userId: string;
+  reactions?: Reaction;
 }

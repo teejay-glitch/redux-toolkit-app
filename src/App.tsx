@@ -1,21 +1,25 @@
-import Counter from "./components/Counter/Counter";
-import AddPostForm from "./components/Posts/AddPostForm";
-import PostList from "./components/Posts/PostList";
+import Layout from "./components/Layout/Layout";
+import AddPostForm from "./pages/Posts/AddPostForm";
+import PostList from "./pages/Posts/PostList";
+import { Routes, Route } from "react-router-dom";
+import SinglePostPage from "./pages/Posts/SinglePostPage";
+import EditPostForm from "./pages/Posts/EditPostForm";
 
 function App() {
   return (
-    <main className="App">
-      {/* LESSON 01 */}
-      {/* <Counter /> */}
-
-      {/* LESSON 02 */}
-      {/* <AddPostForm />
-      <PostList /> */}
-
-      {/* LESSON 03 */}
-      <AddPostForm />
-      <PostList />
-    </main>
+    <>
+      {/* LESSON 04 */}
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<PostList />} />
+          <Route path="post">
+            <Route index element={<AddPostForm />} />
+            <Route path=":postId" element={<SinglePostPage />} />
+            <Route path="edit/:postId" element={<EditPostForm />} />
+          </Route>
+        </Route>
+      </Routes>
+    </>
   );
 }
 
