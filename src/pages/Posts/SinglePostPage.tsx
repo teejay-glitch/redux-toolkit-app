@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { selectPostById } from "../../app/features/postsAsync/postAsyncSlice";
+import { selectAsyncPostById } from "../../app/features/postsAsync/postAsyncSlice";
 import { RootState } from "../../app/store/store";
 import Author from "./Author";
 import ReactionButtons from "./ReactionButtons";
@@ -9,7 +9,7 @@ import { Link, useParams } from "react-router-dom";
 
 const SinglePostPage: React.FC = () => {
   const { postId } = useParams();
-  const post = useSelector((state: RootState) => selectPostById(state, postId));
+  const post = useSelector((state: RootState) => selectAsyncPostById(state, postId || "1"));
 
   if (!post) {
     return (

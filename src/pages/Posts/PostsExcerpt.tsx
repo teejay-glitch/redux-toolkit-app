@@ -1,15 +1,19 @@
 import React from "react";
-import { Post } from "../../models/Post";
 import Author from "./Author";
 import TimeAgo from "./TimeAgo";
 import ReactionButtons from "./ReactionButtons";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectAsyncPostById } from "../../app/features/postsAsync/postAsyncSlice";
+import { RootState } from "../../app/store/store";
 
 type PostsExcerptProps = {
-  post: Post;
+  postId: string;
 };
 
-const PostsExcerpt: React.FC<PostsExcerptProps> = ({ post }: PostsExcerptProps) => {
+const PostsExcerpt: React.FC<PostsExcerptProps> = ({ postId }: PostsExcerptProps) => {
+  const post = useSelector((state: RootState) => selectAsyncPostById(state, postId));
+
   return (
     <article>
       <h2>{post.title}</h2>

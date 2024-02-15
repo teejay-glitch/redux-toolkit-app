@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { AppDispatch, RootState } from "../../app/store/store";
-import { updatePost, deletePost, selectPostById } from "../../app/features/postsAsync/postAsyncSlice";
+import { updatePost, deletePost, selectAsyncPostById } from "../../app/features/postsAsync/postAsyncSlice";
 import { selectAllAsyncUsers } from "../../app/features/usersAsync/userAsyncSlice";
 import { PostRequest } from "../../models/Post";
 import { User } from "../../models/User";
@@ -11,7 +11,7 @@ const EditPostForm: React.FC = () => {
   const { postId } = useParams();
   const navigate = useNavigate();
 
-  const post = useSelector((state: RootState) => selectPostById(state, postId));
+  const post = useSelector((state: RootState) => selectAsyncPostById(state, postId || "1"));
   const users = useSelector(selectAllAsyncUsers);
 
   const [title, setTitle] = useState<string>(post?.title || "");

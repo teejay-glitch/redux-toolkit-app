@@ -1,11 +1,11 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Post } from "../../models/Post";
-import { selectAllAsyncPosts, getPostsStatus, getPostsError } from "../../app/features/postsAsync/postAsyncSlice";
+import { selectPostsAsyncIds, getPostsStatus, getPostsError } from "../../app/features/postsAsync/postAsyncSlice";
 import PostsExcerpt from "./PostsExcerpt";
 
 const PostList: React.FC = () => {
-  const posts = useSelector(selectAllAsyncPosts);
+  const orderedPostsIds = useSelector(selectPostsAsyncIds);
   const postsStatus = useSelector(getPostsStatus);
   const postsError = useSelector(getPostsError);
 
@@ -14,9 +14,8 @@ const PostList: React.FC = () => {
   if (postsStatus === "loading") {
     content = <p>"Loading..."</p>;
   } else if (postsStatus === "suceeded") {
-    const orderedPosts = posts.slice().sort((a: Post, b: Post) => b.date.localeCompare(a.date));
-    content = orderedPosts.map((post: Post, index: number) => {
-      return <PostsExcerpt key={index} post={post} />;
+    content = orderedPostsIds.map((postId: string, index: number) => {
+      return <PostsExcerpt key={index} postId={postId} />;
     });
   } else {
     content = <p>{postsError}</p>;

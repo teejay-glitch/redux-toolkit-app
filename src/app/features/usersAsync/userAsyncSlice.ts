@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, isAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store/store";
-import { UserResponse } from "../../../models/User";
+import { User, UserResponse } from "../../../models/User";
 import axios from "axios";
 
 const USER_URL = "https://jsonplaceholder.typicode.com/users";
@@ -36,5 +36,8 @@ export const usersAsyncSlice = createSlice({
 });
 
 export const selectAllAsyncUsers = (state: RootState) => state.usersAsync.users;
+
+export const selectAsyncUserById = (state: RootState, userId: string | undefined) =>
+  state.usersAsync.users.find((user: User) => user.id.toString() == userId);
 
 export default usersAsyncSlice.reducer;

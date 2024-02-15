@@ -20,6 +20,7 @@ export interface PostsResponse {
   posts: Post[];
   status: "idle" | "loading" | "suceeded" | "failed";
   error: any;
+  count: number;
 }
 
 export interface PostRequest {
